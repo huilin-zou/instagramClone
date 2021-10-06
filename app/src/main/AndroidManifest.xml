@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IgClone">
 
+        <activity
+            android:name=".SignupActivity"
+            android:exported="true" />
+
 
 
         <provider
