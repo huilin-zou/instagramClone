@@ -8,18 +8,27 @@
     android:layout_margin="16dp"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/nav_logo_whiteout" />
+
+    <ImageView
+        android:id="@+id/ivDM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        app:srcCompat="@drawable/nav_inbox_paper_plane" />
+
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Caption" />
-
-    <Button
-        android:id="@+id/btnCaptureImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       android:text="Take Picture"/>
+        android:hint="Caption"
+        android:minHeight="48dp" />
 
     <ImageView
         android:id="@+id/ivPosterImage"
@@ -28,8 +37,17 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="match_parent"
+        android:id="@+id/btnCaptureImage"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-    android:text="Submit" />
+        android:layout_gravity="center"
+        android:text="Take Picture" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layoutDirection="ltr"
+        android:text="Submit" />
 </LinearLayout>
