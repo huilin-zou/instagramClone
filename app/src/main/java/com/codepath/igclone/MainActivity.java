@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE=43;
     private EditText etDescription;
     private Button btnCaptureImage;
-    private ImageView ivPosterImage;
+    private ImageView ivPostImage;
     private Button btnSubmit;
     private File photoFile;
     public String photoFileName = "photo.jpg";
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         etDescription=findViewById(R.id.etDescription);
         btnCaptureImage=findViewById(R.id.btnCaptureImage);
-        ivPosterImage=findViewById(R.id.ivPosterImage);
+        ivPostImage=findViewById(R.id.ivPostImage);
         btnSubmit=findViewById(R.id.btnSubmit);
 
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
@@ -55,21 +56,26 @@ public class MainActivity extends AppCompatActivity {
                 launchCamera();
             }
         });
-                
+
         //queryPost();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String description=etDescription.getText().toString();
-                if(description.isEmpty()){
-                    Toast.makeText(MainActivity.this,"Description cannot be empty", Toast.LENGTH_SHORT).show();
+                String description = etDescription.getText().toString();
+                if(description.isEmpty())
+                {
+                    Toast.makeText(MainActivity.this,"description can not be empty",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                ParseUser currentUser=ParseUser.getCurrentUser();
-                savepost(description,currentUser);
+                if(photoFile==null||ivPostImage.getDrawable()==null)
+                {
+                    Toast.makeText(MainActivity.this,"There is no image",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                savepost(description,currentUser,photoFile);
             }
         });
-
     }
 
     private void launchCamera() {
@@ -101,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
 
-                ivPosterImage.setImageBitmap(takenImage);
+                ivPostImage.setImageBitmap(takenImage);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -121,14 +127,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Return the file target for the photo based on filename
-       return new File(mediaStorageDir.getPath() + File.separator + fileName);
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+        return file;
 
 
     }
 
-    private void savepost(String description, ParseUser currentUser) {
+    private void savepost(String description, ParseUser currentUser, File photoFile) {
         Post post=new Post();
         post.setDescription(description);
+        post.setImage(new ParseFile(photoFile));
         post.setUser(currentUser);
         post.saveInBackground(new SaveCallback() {
             @Override
@@ -139,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Log.i(TAG,"Post save was successful");
                 etDescription.setText("");
+                ivPostImage.setImageResource(0);
             }
         });
     }
